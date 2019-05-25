@@ -48,6 +48,8 @@ const signUp = async (req, res) => {
   delete inserted_user.password;
   // delete inserted_user.verificationCode; // For testing purpose we are not deleting the verification code while signup
 
+  // Before returning response we will send an Email to the register user with OTP on it.
+
   return createdResponse(res, {
     ...inserted_user
   }, "Your account has been created successfully. Please verify your registered email id to continue.");
@@ -127,12 +129,20 @@ const verifyUser = async (req, res) => {
     return badRequestError(res, 'The request expects an email');
   }
 
+  const userExists = await User.query().skipUndefined().where('email', email).first();
+  if (!userExists) return badRequestError(res, 'No user exists with this emai.');
+
+  if (userExists.isVerified) {
+    return errorResponse(res, null, 'User is already verified', 409);
+  }
+
   // For security reasons, limit the relations that can be fetched.
   const user = await User.query().skipUndefined().where('email', email).where('verificationCode', verificationCode).first();
 
   if (user) {
     let updated = await User.query().patch({
-      isVerified: true
+      isVerified: true,
+      verificationCode: null
     }).where('email', email);
 
   } else {
