@@ -141,6 +141,12 @@ class User extends Model {
     }
   }
 
+  $formatJson(json, opt) {
+    json = super.$formatJson(json, opt);
+    json.password ? delete json.password : json;
+    return json;
+  }
+
 }
 
 module.exports = User;

@@ -4,9 +4,9 @@ exports.up = async (knex, Promise) => {
 
         await knex.schema.createTable('users', table => {
             table.increments('id').primary();
-            table.string('name');
-            table.string('username');
-            table.string('email');
+            table.string('name').notNullable();
+            table.string('username').notNullable();
+            table.string('email').notNullable();
             table.string('verificationCode');
             table.boolean('isVerified').defaultTo(false);
             table.string('password');
@@ -15,7 +15,7 @@ exports.up = async (knex, Promise) => {
 
         await knex.schema.createTable('auth_token', table => {
             table.increments('id', 11).primary();
-            table.text('token');
+            table.text('token').notNullable();
             table.integer('userId', 11)
                 .unsigned()
                 .references('id')
