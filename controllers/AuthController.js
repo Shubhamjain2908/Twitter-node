@@ -44,7 +44,7 @@ const login = async (req, res) => {
 
   let err, user;
   const data = req.body;
-  const loginType = data.loginType;   // '0' => email
+  const loginType = data.loginType;   // '0' => for login with email
 
   if (!data.password) {
     return badRequestError(res, "Please enter password");
