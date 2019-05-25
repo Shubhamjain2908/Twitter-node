@@ -79,6 +79,18 @@ class User extends Model {
       })
     }
 
+    if (!/[^a-zA-Z]/.test(this.name)) {
+      throw new ValidationError({
+        message: "Not a valid name!",
+        type: "ModelValidation",
+        data: {
+          message: "Please enter a valid name.",
+          code: 406,
+          status: "error"
+        }
+      })
+    }
+
     let usernameExists = await this.constructor.query().select('id').where('username', this.username).first();
     let emailExists = await this.constructor.query().select('id').where('email', this.email).first();
 
@@ -105,12 +117,12 @@ class User extends Model {
         });
       } else {
         throw new ValidationError({
-          message: "Account with this username already exists!",
+          message: "Account with this email already exists!",
           type: "ModelValidation",
           data: {
             status: "error",
             code: 406,
-            message: "Account already exists with this username!"
+            message: "Account already exists with this email!"
           }
         });
       }
