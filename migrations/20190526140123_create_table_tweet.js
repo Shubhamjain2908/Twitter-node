@@ -9,10 +9,7 @@ exports.up = async (knex, Promise) => {
                 .inTable('user')
                 .onDelete('cascade');
             table.text('tweet');
-            table.integer('totalRetweets');
-            table.integer('retweetId')
-                .unsigned()
-                .nullable()
+            table.integer('parentId')
                 .references('id')
                 .inTable('tweets')
                 .onDelete('CASCADE');

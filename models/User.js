@@ -41,8 +41,57 @@ class User extends Model {
   // This object defines the relations to other models.
   static get relationMappings() {
     return {
+      followers: {
+        relation: Model.ManyToManyRelation,
+        modelClass: __dirname + '/User',
+        join: {
+          from: 'user.id',
+          through: {
+            from: 'follow.followedUser',
+            to: 'follow.follower'
+          },
+          to: 'user.id'
+        }
+      },
+      following: {
+        relation: Model.ManyToManyRelation,
+        modelClass: __dirname + '/User',
+        join: {
+          from: 'user.id',
+          through: {
+            from: 'follow.follower',
+            to: 'follow.followedUser'
+          },
+          to: 'user.id'
+        }
+      },
 
-    };
+      userFollowers: {
+        relation: Model.HasManyRelation,
+        modelClass: __dirname + '/Follow',
+        join: {
+          from: 'user.id',
+          to: 'follow.followedUser'
+        }
+      },
+      userFollowing: {
+        relation: Model.HasManyRelation,
+        modelClass: __dirname + '/Follow',
+        join: {
+          from: 'user.id',
+          to: 'follow.follower'
+        }
+      },
+
+      tweets: {
+        relation: Model.HasManyRelation,
+        modelClass: __dirname + '/Tweets',
+        join: {
+          from: 'user.id',
+          to: 'tweets.userId'
+        }
+      }
+    }
   }
 
   async getJWT() {

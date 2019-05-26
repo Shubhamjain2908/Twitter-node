@@ -38,7 +38,7 @@ class Tweets extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: __dirname + '/Tweets',
                 join: {
-                    from: 'tweets.retweetId',
+                    from: 'tweets.parentId',
                     to: 'tweets.id'
                 }
             },
@@ -47,7 +47,7 @@ class Tweets extends Model {
                 modelClass: __dirname + '/Tweets',
                 join: {
                     from: 'tweets.id',
-                    to: 'tweets.retweetId'
+                    to: 'tweets.parentId'
                 }
             },
         }

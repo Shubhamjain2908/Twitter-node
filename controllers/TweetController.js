@@ -32,13 +32,13 @@ const fetchUserFeed = async (req, res) => {
     );
     let tweets = [];
     if (userId.length > 0) {
-        tweets = await Tweets.query().whereIn('userId', userId);
+        tweets = await Tweets.query().whereIn('userId', userId).orderBy('created_at', 'DESC');
     }
     return okResponse(res, tweets);
 }
 
 const getUserTweets = async (req, res) => {
-    let tweets = await Tweets.query().where('userId', req.user.id);
+    let tweets = await Tweets.query().where('userId', req.user.id).orderBy('created_at', 'DESC');
     return okResponse(res, tweets);
 }
 
