@@ -28,7 +28,7 @@ class Token extends Model {
 
         join: {
           from: 'auth_token.userId',
-          to: 'users.id'
+          to: 'user.id'
         }
       }
     }

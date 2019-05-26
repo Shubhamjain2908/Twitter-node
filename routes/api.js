@@ -7,6 +7,7 @@ const router = express.Router();
 
 const Auth = require('../controllers/AuthController');
 const User = require('../controllers/UserController');
+const Tweet = require('../controllers/TweetController');
 
 
 /***********************
@@ -25,9 +26,18 @@ router.get('/logout', passport.authenticate('jwt', { session: false }), Auth.log
 ***********************/
 router.post('/follow', passport.authenticate('jwt', { session: false }), User.followUser);
 router.post('/unfollow', passport.authenticate('jwt', { session: false }), User.unFollowUser);
-
 /***********************
   User Routes
+***********************/
+
+/***********************
+  Tweet Routes
+***********************/
+router.post('/tweet', passport.authenticate('jwt', { session: false }), Tweet.createTweet);
+router.get('/tweet', passport.authenticate('jwt', { session: false }), Tweet.fetchUserTweets);
+router.delete('/tweet/:id', passport.authenticate('jwt', { session: false }), Tweet.deleteTweet);
+/***********************
+  Tweet Routes
 ***********************/
 
 module.exports = router;

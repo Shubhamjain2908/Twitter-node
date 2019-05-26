@@ -1,20 +1,21 @@
 exports.up = async (knex, Promise) => {
 
     try {
-        await knex.schema.createTable('follow', table => {
+        await knex.schema.createTable('tweets', table => {
             table.increments('id').primary();
-            table.integer('follower')
+            table.integer('userId')
                 .unsigned()
-                .notNullable()
                 .references('id')
                 .inTable('user')
                 .onDelete('cascade');
-            table.integer('followedUser')
+            table.text('tweet');
+            table.integer('totalRetweets');
+            table.integer('retweetId')
                 .unsigned()
-                .notNullable()
+                .nullable()
                 .references('id')
-                .inTable('user')
-                .onDelete('cascade');
+                .inTable('tweets')
+                .onDelete('CASCADE');
             table.timestamps(false, true);
         });
         return Promise.resolve();
@@ -24,5 +25,5 @@ exports.up = async (knex, Promise) => {
 };
 
 exports.down = knex => {
-    return knex.schema.dropTableIfExists('follow');
+    return knex.schema.dropTableIfExists('tweets');
 };

@@ -10,7 +10,7 @@ class User extends Model {
 
   // Table name is the only required property.
   static get tableName() {
-    return 'users';
+    return 'user';
   }
 
   // Optional JSON schema. This is not the database schema! Nothing is generated

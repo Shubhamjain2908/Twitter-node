@@ -2,7 +2,7 @@ exports.up = async (knex, Promise) => {
 
     try {
 
-        await knex.schema.createTable('users', table => {
+        await knex.schema.createTable('user', table => {
             table.increments('id').primary();
             table.string('name').notNullable();
             table.string('username').notNullable();
@@ -19,7 +19,7 @@ exports.up = async (knex, Promise) => {
             table.integer('userId', 11)
                 .unsigned()
                 .references('id')
-                .inTable('users')
+                .inTable('user')
                 .onDelete('CASCADE');
             table.timestamps(false, true);
         });
@@ -33,7 +33,7 @@ exports.up = async (knex, Promise) => {
 
 exports.down = knex => {
     return knex.schema
-        .dropTableIfExists('users')
+        .dropTableIfExists('user')
         .dropTableIfExists('auth_token')
 
 };
