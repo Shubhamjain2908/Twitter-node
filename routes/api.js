@@ -34,7 +34,8 @@ router.post('/unfollow', passport.authenticate('jwt', { session: false }), User.
   Tweet Routes
 ***********************/
 router.post('/tweet', passport.authenticate('jwt', { session: false }), Tweet.createTweet);
-router.get('/tweet', passport.authenticate('jwt', { session: false }), Tweet.fetchUserTweets);
+router.get('/tweet/feed', passport.authenticate('jwt', { session: false }), Tweet.fetchUserFeed);
+router.get('/tweets', passport.authenticate('jwt', { session: false }), Tweet.getUserTweets);
 router.delete('/tweet/:id', passport.authenticate('jwt', { session: false }), Tweet.deleteTweet);
 /***********************
   Tweet Routes

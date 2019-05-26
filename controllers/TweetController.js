@@ -22,7 +22,7 @@ const deleteTweet = async (req, res) => {
     }
 }
 
-const fetchUserTweets = async (req, res) => {
+const fetchUserFeed = async (req, res) => {
     let userId = await Follow.query().select('followedUser').where('follower', req.user.id).then(
         (a) => {
             return a.map(c => {
@@ -37,8 +37,14 @@ const fetchUserTweets = async (req, res) => {
     return okResponse(res, tweets);
 }
 
+const getUserTweets = async (req, res) => {
+    let tweets = await Tweets.query().where('userId', req.user.id);
+    return okResponse(res, tweets);
+}
+
 module.exports = {
     createTweet,
-    fetchUserTweets,
+    fetchUserFeed,
+    getUserTweets,
     deleteTweet
 }
