@@ -37,6 +37,10 @@ router.post('/tweet', passport.authenticate('jwt', { session: false }), Tweet.cr
 router.get('/tweet/feed', passport.authenticate('jwt', { session: false }), Tweet.fetchUserFeed);
 router.get('/tweets', passport.authenticate('jwt', { session: false }), Tweet.getUserTweets);
 router.delete('/tweet/:id', passport.authenticate('jwt', { session: false }), Tweet.deleteTweet);
+
+router.post('/tweet/like', passport.authenticate('jwt', { session: false }), Tweet.likeTweet);
+router.post('/tweet/unlike', passport.authenticate('jwt', { session: false }), Tweet.unLikeTweet);
+
 /***********************
   Tweet Routes
 ***********************/

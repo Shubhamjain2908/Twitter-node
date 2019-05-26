@@ -92,6 +92,10 @@ ReE = function (res, err, code) {
   });
 }
 
+notFoundError = function (msg) {
+  return createStatusCodeError(404, msg);
+}
+
 // The error returned by this function is handled in the error handler middleware in app.js.
 statusCodeError = function createStatusCodeError(statusCode) {
   return Object.assign(new Error(), {
