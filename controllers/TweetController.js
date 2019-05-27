@@ -11,7 +11,7 @@ const createTweet = async (req, res) => {
         tweet: body.tweet
     }
     let insertedTweet = await Tweets.query().insertAndFetch(data);
-    return createdResponse(res, insertedTweet);
+    return createdResponse(res, insertedTweet, 'Tweet created successfully!');
 }
 
 const deleteTweet = async (req, res) => {
