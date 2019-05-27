@@ -42,18 +42,18 @@ exports.seed = async (knex, Promise) => {
       },
       {
         "id": 8,
-        "follower": 1,
-        "followedUser": 5
+        "follower": 2,
+        "followedUser": 3
       },
       {
         "id": 9,
         "follower": 2,
-        "followedUser": 6
+        "followedUser": 4
       },
       {
         "id": 10,
-        "follower": 1,
-        "followedUser": 10
+        "follower": 3,
+        "followedUser": 1
       },
     ]);
 

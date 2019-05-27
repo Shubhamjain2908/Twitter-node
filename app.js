@@ -80,3 +80,5 @@ app.use((err, req, res, next) => {
 const server = app.listen(8641, () => {
   console.log('Twitter app listening at port %s', server.address().port);
 });
+
+module.exports = app;

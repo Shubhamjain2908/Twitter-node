@@ -19,13 +19,11 @@ class User extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name', 'email', 'username'],
+      required: ['username', 'password'],
 
       properties: {
         id: { type: 'integer' },
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        username: { type: 'string', minLength: 1, maxLength: 255 },
-        email: { type: 'string', minLength: 1, maxLength: 255 }
+        username: { type: 'string', minLength: 1, maxLength: 255 }
       }
     };
   }
@@ -116,65 +114,18 @@ class User extends Model {
       })
     }
 
-    if (!validator.isEmail(this.email || '')) {
-      throw new ValidationError({
-        message: "Not a valid email!",
-        type: "ModelValidation",
-        data: {
-          message: "Please enter a valid email address.",
-          code: 406,
-          status: "error"
-        }
-      })
-    }
-
-    if (!/[^a-zA-Z]/.test(this.name)) {
-      throw new ValidationError({
-        message: "Not a valid name!",
-        type: "ModelValidation",
-        data: {
-          message: "Please enter a valid name.",
-          code: 406,
-          status: "error"
-        }
-      })
-    }
-
     let usernameExists = await this.constructor.query().select('id').where('username', this.username).first();
-    let emailExists = await this.constructor.query().select('id').where('email', this.email).first();
 
-    if (usernameExists || emailExists) {
-      if (usernameExists && emailExists) {
-        throw new ValidationError({
-          message: "Account with this username & email already exists!",
-          type: "ModelValidation",
-          data: {
-            status: "error",
-            code: 406,
-            message: "Account already exists with this username & email address!"
-          }
-        });
-      } else if (usernameExists) {
-        throw new ValidationError({
-          message: "Account with this username already exists!",
-          type: "ModelValidation",
-          data: {
-            status: "error",
-            code: 406,
-            message: "Account already exists with this username!"
-          }
-        });
-      } else {
-        throw new ValidationError({
-          message: "Account with this email already exists!",
-          type: "ModelValidation",
-          data: {
-            status: "error",
-            code: 406,
-            message: "Account already exists with this email!"
-          }
-        });
-      }
+    if (usernameExists) {
+      throw new ValidationError({
+        message: "Account with this username already exists!",
+        type: "ModelValidation",
+        data: {
+          status: "error",
+          code: 406,
+          message: "Account already exists with this username!"
+        }
+      });
     }
 
     if (this.password) {

@@ -5,8 +5,10 @@
   "main": "app.js",
   "scripts": {
     "migrate": "knex migrate:latest",
-    "start": "npm run migrate && node app",
-    "dev": "nodemon app"
+    "seed": "knex seed:run",
+    "start": "npm run migrate && npm run seed && node app",
+    "dev": "nodemon app",
+    "test": "mocha --recursive --exit"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -16,12 +18,15 @@
   "dependencies": {
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.2",
     "express-promise-router": "^3.0.1",
     "knex": "^0.14.6",
     "lodash": "^4.17.4",
+    "mocha": "^6.1.4",
     "moment": "^2.24.0",
     "morgan": "^1.9.0",
     "objection": "^1.1.8",

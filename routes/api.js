@@ -15,7 +15,6 @@ const Tweet = require('../controllers/TweetController');
 ***********************/
 router.post('/signup', Auth.signUp);
 router.post('/login', Auth.login);
-router.post('/verify', Auth.verifyUser);
 router.get('/logout', passport.authenticate('jwt', { session: false }), Auth.logout);
 /***********************
   Auth Routes
