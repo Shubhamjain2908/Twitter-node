@@ -24,7 +24,7 @@ const followUser = async (req, res) => {
     }
 
     let followUser = await Follow.query().insertAndFetch(data);
-    return createdResponse(res, followUser);
+    return createdResponse(res, followUser, 'Successfully following the user');
 }
 
 const unFollowUser = async (req, res) => {
@@ -41,7 +41,7 @@ const unFollowUser = async (req, res) => {
 
     const followedUserExists = await User.query().skipUndefined().where('id', followedUserId).first();
     if (!followedUserExists) {
-        return ReE(res, 'No user found to follow with this user Id', 404);
+        return ReE(res, 'No user found with this user Id', 404);
     }
 
     let QUERY = Follow.query().where('follower', followerId).where('followedUser', followedUserId).first();
