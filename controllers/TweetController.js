@@ -54,6 +54,18 @@ const fetchUserFeed = async (req, res) => {
     return okResponse(res, tweets);
 }
 
+const getTweetById = async (req, res) => {
+    let tweetId = req.params.id;
+    if (!+tweetId) {
+        return badRequestError(res, 'Request Expects an integer Tweet id!');
+    }
+    let tweet = await Tweets.query().findById(+tweetId).eager('[parent, children]');
+    if (!tweet) {
+        return notFoundError(res, 'Tweet not Found!');
+    }
+    return okResponse(res, tweet);
+}
+
 const getUserTweets = async (req, res) => {
     let tweets = await Tweets.query().where('userId', req.user.id).orderBy('created_at', 'DESC');
     return okResponse(res, tweets);
@@ -164,5 +176,6 @@ module.exports = {
     likeTweet,
     unLikeTweet,
     reTweet,
-    undoRetweet
+    undoRetweet,
+    getTweetById
 }

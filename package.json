@@ -6,7 +6,7 @@
   "scripts": {
     "migrate": "knex migrate:latest",
     "seed": "knex seed:run",
-    "start": "npm run migrate && npm run seed && node app",
+    "start": "npm run migrate && node app",
     "dev": "nodemon app",
     "test": "mocha --recursive --exit"
   },

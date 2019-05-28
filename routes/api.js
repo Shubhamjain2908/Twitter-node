@@ -27,6 +27,7 @@ router.post('/follow', passport.authenticate('jwt', { session: false }), User.fo
 router.post('/unfollow', passport.authenticate('jwt', { session: false }), User.unFollowUser);
 router.get('/followers', passport.authenticate('jwt', { session: false }), User.getFollowers);
 router.get('/followed-user', passport.authenticate('jwt', { session: false }), User.getFollowedUser);
+router.get('/profile', passport.authenticate('jwt', { session: false }), User.getUserDetails);
 /***********************
   User Routes
 ***********************/
@@ -37,6 +38,7 @@ router.get('/followed-user', passport.authenticate('jwt', { session: false }), U
 router.post('/tweet', passport.authenticate('jwt', { session: false }), Tweet.createTweet);
 router.get('/tweet/feed', passport.authenticate('jwt', { session: false }), Tweet.fetchUserFeed);
 router.get('/tweets', passport.authenticate('jwt', { session: false }), Tweet.getUserTweets);
+router.get('/tweet/:id', passport.authenticate('jwt', { session: false }), Tweet.getTweetById);
 router.delete('/tweet/:id', passport.authenticate('jwt', { session: false }), Tweet.deleteTweet);
 
 router.post('/tweet/like', passport.authenticate('jwt', { session: false }), Tweet.likeTweet);

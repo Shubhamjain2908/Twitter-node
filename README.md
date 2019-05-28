@@ -214,3 +214,8 @@ ___
  > Authorizations header with Bearer token provided in Login Api's response
 ___
 
+#### Postman Collection
+
+Link: [https://www.getpostman.com/collections/54bd2e84b27ad2b4dcb0](https://www.getpostman.com/collections/54bd2e84b27ad2b4dcb0)
+
+For authorization add authorization in collection and all the request will inherit it.

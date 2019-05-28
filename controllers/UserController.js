@@ -67,9 +67,20 @@ const getFollowedUser = async (req, res) => {
     return successResponse(res, 200, followers, 'Successfully get the followers');
 }
 
+const getUserDetails = async (req, res) => {
+    const userId = req.user.id;
+    const profile = await User.query().skipUndefined().where('id', userId)
+        .eager('[userFollowers, userFollowing, tweets]')
+        .modifyEager('tweets', builder => {
+            builder.orderBy('created_at', 'DESC');
+        });
+    return okResponse(res, profile);
+}
+
 module.exports = {
     followUser,
     unFollowUser,
     getFollowers,
-    getFollowedUser
+    getFollowedUser,
+    getUserDetails
 }
