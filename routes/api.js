@@ -25,6 +25,8 @@ router.get('/logout', passport.authenticate('jwt', { session: false }), Auth.log
 ***********************/
 router.post('/follow', passport.authenticate('jwt', { session: false }), User.followUser);
 router.post('/unfollow', passport.authenticate('jwt', { session: false }), User.unFollowUser);
+router.get('/followers', passport.authenticate('jwt', { session: false }), User.getFollowers);
+router.get('/followed-user', passport.authenticate('jwt', { session: false }), User.getFollowedUser);
 /***********************
   User Routes
 ***********************/

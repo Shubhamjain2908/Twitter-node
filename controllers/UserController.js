@@ -53,7 +53,23 @@ const unFollowUser = async (req, res) => {
     return successResponse(res, 200, null, 'Unfollowed successfully');
 }
 
+const getFollowers = async (req, res) => {
+    const userId = req.user.id;
+    const followers = await User.query().skipUndefined()
+        .whereRaw('id in (SELECT "follow"."follower" FROM follow WHERE "follow"."followedUser" = ?)', userId)
+    return successResponse(res, 200, followers, 'Successfully get the followers');
+}
+
+const getFollowedUser = async (req, res) => {
+    const userId = req.user.id;
+    const followers = await User.query().skipUndefined()
+        .whereRaw('id in (SELECT "follow"."followedUser" FROM follow WHERE "follow"."follower" = ?)', userId)
+    return successResponse(res, 200, followers, 'Successfully get the followers');
+}
+
 module.exports = {
     followUser,
-    unFollowUser
+    unFollowUser,
+    getFollowers,
+    getFollowedUser
 }
