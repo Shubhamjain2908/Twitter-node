@@ -11,12 +11,25 @@ const createTweet = async (req, res) => {
         userId: req.user.id,
         tweet: body.tweet
     }
+    if (req.params.id && !isNaN(req.params.id)) {
+        const id = req.params.id;
+        const tweetExists = await Tweets.query().where('id', id).first();
+        if (!tweetExists) {
+            return notFoundError(res, 'No Tweet Found with this Id!');
+        } else {
+            data.parentId = id;
+        }
+    }
+    console.log('Data => ', data);
     let insertedTweet = await Tweets.query().insertAndFetch(data);
     return createdResponse(res, insertedTweet, 'Tweet created successfully!');
 }
 
 const deleteTweet = async (req, res) => {
     let id = req.params.id;
+    if (!id || isNaN(id)) {
+        return badRequestError(res, 'Request expects an Integer Id!');
+    }
     const tweetExists = await Tweets.query().where('id', id).first();
     if (tweetExists) {
         await Tweets.query().deleteById(id);
@@ -50,13 +63,13 @@ const likeTweet = async (req, res) => {
     let userId = req.user.id;
     let tweetId = req.body.tweetId;
 
-    if (!tweetId) {
-        return badRequestError(res, 'Request expexts an tweet Id!');
+    if (!tweetId || isNaN(tweetId)) {
+        return badRequestError(res, 'Request expects an Integer Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId);
     if (!tweetExists) {
-        return notFoundError('No Tweet Found with this Id!');
+        return notFoundError(res, 'No Tweet Found with this Id!');
     }
 
     let alreadyLiked = await Like.query().where('tweetId', tweetId).where('userId', userId).first();
@@ -77,8 +90,8 @@ const unLikeTweet = async (req, res) => {
     let userId = req.user.id;
     let tweetId = req.body.tweetId;
 
-    if (!tweetId) {
-        return badRequestError(res, 'Request expexts an tweet Id!');
+    if (!tweetId || isNaN(tweetId)) {
+        return badRequestError(res, 'Request expects an Integer Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId);
@@ -98,8 +111,8 @@ const unLikeTweet = async (req, res) => {
 const reTweet = async (req, res) => {
     let userId = req.user.id;
     let tweetId = req.body.tweetId;
-    if (!tweetId) {
-        return badRequestError(res, 'Request expexts an tweet Id!');
+    if (!tweetId || isNaN(tweetId)) {
+        return badRequestError(res, 'Request expects an Integer Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId).first();
@@ -125,13 +138,13 @@ const undoRetweet = async (req, res) => {
     let userId = req.user.id;
     let tweetId = req.body.tweetId;
 
-    if (!tweetId) {
-        return badRequestError(res, 'Request expexts an tweet Id!');
+    if (!tweetId || isNaN(tweetId)) {
+        return badRequestError(res, 'Request expects an Integer Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId);
     if (!tweetExists) {
-        return notFoundError('No Tweet Found with this Id!');
+        return notFoundError(res, 'No Tweet Found with this Id!');
     }
 
     let QUERY = Retweet.query().where('tweetId', tweetId).where('userId', userId).first();

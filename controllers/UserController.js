@@ -5,8 +5,8 @@ const followUser = async (req, res) => {
     const followerId = req.user.id;
     const followedUserId = req.body.id;
 
-    if (!followedUserId) {
-        return badRequestError(res, 'Request expexts an followed user Id!');
+    if (!followedUserId || isNaN(followedUserId)) {
+        return badRequestError(res, 'Request expects an followed user Id: Of Integer type only!');
     }
 
     if (followerId == followedUserId) {
@@ -15,7 +15,7 @@ const followUser = async (req, res) => {
 
     const followedUserExists = await User.query().skipUndefined().where('id', followedUserId).first();
     if (!followedUserExists) {
-        return ReE(res, 'No user found to follow with this user Id', 404);
+        return notFoundError(res, 'No user found to follow with this user Id');
     }
 
     let data = {
@@ -31,8 +31,8 @@ const unFollowUser = async (req, res) => {
     const followerId = req.user.id;
     const followedUserId = req.body.id;
 
-    if (!followedUserId) {
-        return badRequestError(res, 'Request expexts an followed user Id!');
+    if (!followedUserId || isNaN(followedUserId)) {
+        return badRequestError(res, 'Request expects an followed user Id: Of Integer type only!');
     }
 
     if (followerId == followedUserId) {
@@ -41,7 +41,7 @@ const unFollowUser = async (req, res) => {
 
     const followedUserExists = await User.query().skipUndefined().where('id', followedUserId).first();
     if (!followedUserExists) {
-        return ReE(res, 'No user found with this user Id', 404);
+        return notFoundError(res, 'No user found with this user Id');
     }
 
     let QUERY = Follow.query().where('follower', followerId).where('followedUser', followedUserId).first();

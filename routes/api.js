@@ -43,6 +43,8 @@ router.post('/tweet/unlike', passport.authenticate('jwt', { session: false }), T
 router.post('/retweet', passport.authenticate('jwt', { session: false }), Tweet.reTweet);
 router.post('/undoretweet', passport.authenticate('jwt', { session: false }), Tweet.undoRetweet);
 
+router.post('/tweet/reply/:id', passport.authenticate('jwt', { session: false }), Tweet.createTweet);
+
 /***********************
   Tweet Routes
 ***********************/
