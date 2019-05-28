@@ -73,6 +73,15 @@ unverifiedError = function (res, message) {
   })
 }
 
+notFoundError = function (res, message) {
+  res.statusCode = 404;
+  return res.json({
+    success: false,
+    code: 404,
+    message: message
+  })
+}
+
 noContentResponse = function (res, message) {
   return successResponse(res, 204, {}, message);
 }
@@ -92,8 +101,12 @@ ReE = function (res, err, code) {
   });
 }
 
-notFoundError = function (msg) {
-  return createStatusCodeError(404, msg);
+// The error returned by this function is handled in the error handler middleware in app.js.
+createStatusCodeError = function (statusCode, message) {
+  return Object.assign(new Error(), {
+    statusCode,
+    message,
+  });
 }
 
 // The error returned by this function is handled in the error handler middleware in app.js.

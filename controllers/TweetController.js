@@ -3,6 +3,7 @@
 const Follow = require('../models/Follow');
 const Tweets = require('../models/Tweets');
 const Like = require('../models/Like');
+const Retweet = require('../models/Retweet');
 
 const createTweet = async (req, res) => {
     const body = req.body;
@@ -21,7 +22,7 @@ const deleteTweet = async (req, res) => {
         await Tweets.query().deleteById(id);
         return noContentResponse(res);
     } else {
-        throw badRequestError('No Tweet exist with this id!');
+        return badRequestError(res, 'No Tweet exist with this id!');
     }
 }
 
@@ -50,23 +51,25 @@ const likeTweet = async (req, res) => {
     let tweetId = req.body.tweetId;
 
     if (!tweetId) {
-        throw badRequestError('Request expexts an tweet Id!');
+        return badRequestError(res, 'Request expexts an tweet Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId);
     if (!tweetExists) {
-        throw notFoundError('No Tweet Found with this Id!');
+        return notFoundError('No Tweet Found with this Id!');
     }
 
     let alreadyLiked = await Like.query().where('tweetId', tweetId).where('userId', userId).first();
     if (alreadyLiked) {
-        throw badRequestError('You have Already liked this tweet!');
+        return badRequestError(res, 'You have Already liked this tweet!');
     }
     const data = {
         tweetId: tweetId,
         userId: userId
     }
-    const like = await Likes.query().insertAndFetch(data);
+    let err, like;
+    [err, like] = await to(Likes.query().insertAndFetch(data));
+    if (err) return ReE(res, err, 422);
     return createdResponse(res, like, 'Tweet liked!');
 }
 
@@ -75,21 +78,69 @@ const unLikeTweet = async (req, res) => {
     let tweetId = req.body.tweetId;
 
     if (!tweetId) {
-        throw badRequestError('Request expexts an tweet Id!');
+        return badRequestError(res, 'Request expexts an tweet Id!');
     }
 
     let tweetExists = await Tweets.query().where('id', tweetId);
     if (!tweetExists) {
-        throw notFoundError('No Tweet Found with this Id!');
+        return notFoundError(res, 'No Tweet Found with this Id!');
     }
 
     let QUERY = Like.query().where('tweetId', tweetId).where('userId', userId).first();
     let exists = await QUERY;
     if (!exists) {
-        return badRequestError(res, 'You have not liked this tweet');
+        return badRequestError(res, 'You have not liked this tweet or You have aleady unliked it.');
     }
     await QUERY.del();
     return successResponse(res, 200, null, 'Unliked successfully');
+}
+
+const reTweet = async (req, res) => {
+    let userId = req.user.id;
+    let tweetId = req.body.tweetId;
+    if (!tweetId) {
+        return badRequestError(res, 'Request expexts an tweet Id!');
+    }
+
+    let tweetExists = await Tweets.query().where('id', tweetId).first();
+    if (!tweetExists) {
+        return notFoundError(res, 'No Tweet Found with this Id!');
+    }
+
+    let alreadyRetweeted = await Retweet.query().where('tweetId', tweetId).where('userId', userId).first();
+    if (alreadyRetweeted) {
+        return badRequestError(res, 'You have Already liked this tweet!');
+    }
+    const data = {
+        tweetId: tweetId,
+        userId: userId
+    }
+    let err, retweet;
+    [err, retweet] = await to(Retweet.query().insertAndFetch(data));
+    if (err) return ReE(res, err, 422);
+    return createdResponse(res, retweet, 'Retweeted successfully!');
+}
+
+const undoRetweet = async (req, res) => {
+    let userId = req.user.id;
+    let tweetId = req.body.tweetId;
+
+    if (!tweetId) {
+        return badRequestError(res, 'Request expexts an tweet Id!');
+    }
+
+    let tweetExists = await Tweets.query().where('id', tweetId);
+    if (!tweetExists) {
+        return notFoundError('No Tweet Found with this Id!');
+    }
+
+    let QUERY = Retweet.query().where('tweetId', tweetId).where('userId', userId).first();
+    let exists = await QUERY;
+    if (!exists) {
+        return badRequestError(res, 'You have not retweeted this tweet or You have already undo it.');
+    }
+    await QUERY.del();
+    return successResponse(res, 200, null, 'Undo the retweet successfully');
 }
 
 module.exports = {
@@ -98,5 +149,7 @@ module.exports = {
     getUserTweets,
     deleteTweet,
     likeTweet,
-    unLikeTweet
+    unLikeTweet,
+    reTweet,
+    undoRetweet
 }

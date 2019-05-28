@@ -40,6 +40,9 @@ router.delete('/tweet/:id', passport.authenticate('jwt', { session: false }), Tw
 router.post('/tweet/like', passport.authenticate('jwt', { session: false }), Tweet.likeTweet);
 router.post('/tweet/unlike', passport.authenticate('jwt', { session: false }), Tweet.unLikeTweet);
 
+router.post('/retweet', passport.authenticate('jwt', { session: false }), Tweet.reTweet);
+router.post('/undoretweet', passport.authenticate('jwt', { session: false }), Tweet.undoRetweet);
+
 /***********************
   Tweet Routes
 ***********************/
